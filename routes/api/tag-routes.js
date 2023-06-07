@@ -40,8 +40,12 @@ router.post('/', async (req, res) => {
 
   try {
     const tagsData = await Tag.create({
-      tag_name: req.body.tag_name
-    })
+     tag_name: req.body.tag_name
+   
+    }
+  
+    )
+    
     res.status(200).json(tagsData)
   } catch (err) {
     console.log(err)
@@ -56,12 +60,19 @@ router.put('/:id', async (req, res) => {
   try {
     const tagsData = await Tag.update({
       tag_name: req.body.tag_name
-    })
-    res.status(200).json(tagsData)
+
+    },
+    {
+      where:{
+        id:req.params.id
+    
+   }
+
+  })
+    res.status(200).json("Updated Sucessfully")
   } catch (err) {
     console.log(err)
   }
-
 
 
 });
@@ -75,6 +86,7 @@ router.delete('/:id', async (req, res) => {
         id: req.params.id
       }
     })
+    res.status(200).json("Deleted Sucessfully")
   } catch (err) {
     console.log(err)
   }

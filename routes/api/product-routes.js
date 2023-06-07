@@ -2,7 +2,6 @@ const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
-
 // get all products
 router.get('/', async (req, res) => {
 try{
@@ -15,32 +14,29 @@ try{
 }
  
   // find all products
-  // be sure to include its associated Category and Tag data
+ 
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+ try{
+  const product = await Product.findByPk(req.params.id,{
+    include:[{model:Tag}, {model:Category }]
+   
+
+  })
+  res.status(200).json(product)
+ }catch(err){
+  console.log (err)
+ }
 });
 
 // create new product
-router.post('/', async(req, res) => {
-const {body :{product_name, price,stock,tagIds}}=req
-  try{
-    const product = await Product.create({
-      product_name, price,stock,tagIds
- 
-     
-    })
-    res.status(200).json(product)
-  }catch(err){
-    console.log(err)
+router.post('/', (req, res) => {
+// const {body :{product_name, price,stock,tagIds}}=req
 
-  }
-  /* req.body should look like this...
-   
-  */
+
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -63,14 +59,20 @@ const {body :{product_name, price,stock,tagIds}}=req
     });
 });
 
+
+
+
+
 // update product
 router.put('/:id', (req, res) => {
   // update product data
+
+
   Product.update(req.body, {
     where: {
       id: req.params.id,
     },
-  })
+   })
     .then((product) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
@@ -96,15 +98,18 @@ router.put('/:id', (req, res) => {
       return Promise.all([
         ProductTag.destroy({ where: { id: productTagsToRemove } }),
         ProductTag.bulkCreate(newProductTags),
+        res.json("Update Sucess")
       ]);
+     
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
+    
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
       res.status(400).json(err);
-    });
-});
-
+    })
+    
+ });
 router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
 try{
@@ -113,7 +118,7 @@ try{
       id:req.params.id
     }
   })
-  res.status(200).json(product)
+  res.status(200).json("Deleted Sucessfully ")
 }catch(err){
   console.log(err)
 }

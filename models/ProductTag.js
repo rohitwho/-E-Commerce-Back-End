@@ -14,7 +14,6 @@ ProductTag.init(
       autoIncrement:true,
       primaryKey:true
     },
-
     // References the Product model's id.
     product_id:{
       type:DataTypes.INTEGER,
@@ -32,7 +31,6 @@ ProductTag.init(
 
       }
     },
-
   },
   {
     sequelize,
