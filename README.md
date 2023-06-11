@@ -20,8 +20,9 @@ https://drive.google.com/file/d/1tqpYTMhjjiIzA1aTd5R5-eJBx21rFsEg/view?usp=shari
 - [Questions](#questions)
 
 ## Screenshot
+![2023-06-10 (1)](https://github.com/rohitwho/-E-Commerce-Back-End/assets/123782523/b8c047ef-ee4e-4bf4-b63c-c97696286670)
 
-![2023-06-10](https://github.com/rohitwho/-E-Commerce-Back-End/assets/123782523/663e2d2c-4ef2-489a-9194-1cf74004b748)
+
 
 
 ## Installation
