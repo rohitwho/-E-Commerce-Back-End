@@ -4,37 +4,37 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 // get all products
 router.get('/', async (req, res) => {
-try{
-  const product = await Product.findAll({
-    include:[{model:Tag}, {model:Category }]
-  })
-  res.status(200).json(product)
-}catch{
-  res.status(500).json(err);
-}
- 
+  try {
+    const product = await Product.findAll({
+      include: [{ model: Tag }, { model: Category }]
+    })
+    res.status(200).json(product)
+  } catch {
+    res.status(500).json(err);
+  }
+
   // find all products
- 
+
 });
 
 // get one product
 router.get('/:id', async (req, res) => {
   // find a single product by its `id`
- try{
-  const product = await Product.findByPk(req.params.id,{
-    include:[{model:Tag}, {model:Category }]
-   
+  try {
+    const product = await Product.findByPk(req.params.id, {
+      include: [{ model: Tag }, { model: Category }]
 
-  })
-  res.status(200).json(product)
- }catch(err){
-  console.log (err)
- }
+
+    })
+    res.status(200).json(product)
+  } catch (err) {
+    console.log(err)
+  }
 });
 
 // create new product
 router.post('/', (req, res) => {
-// const {body :{product_name, price,stock,tagIds}}=req
+  // const {body :{product_name, price,stock,tagIds}}=req
 
 
   Product.create(req.body)
@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
 
 
 
-
+//
 
 // update product
 router.put('/:id', (req, res) => {
@@ -72,7 +72,7 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-   })
+  })
     .then((product) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
@@ -81,47 +81,58 @@ router.put('/:id', (req, res) => {
       // get list of current tag_ids
       const productTagIds = productTags.map(({ tag_id }) => tag_id);
       // create filtered list of new tag_ids
-      const newProductTags = req.body.tagIds
-        .filter((tag_id) => !productTagIds.includes(tag_id))
-        .map((tag_id) => {
-          return {
-            product_id: req.params.id,
-            tag_id,
-          };
-        });
-      // figure out which ones to remove
-      const productTagsToRemove = productTags
-        .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
-        .map(({ id }) => id);
+      if (req.body.tagIds) {
 
-      // run both actions
-      return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
-        ProductTag.bulkCreate(newProductTags),
-        res.json("Update Sucess")
-      ]);
-     
+        const newProductTags = req.body.tagIds
+
+          .filter((tag_id) => !productTagIds.includes(tag_id))
+          .map((tag_id) => {
+            return {
+              product_id: req.params.id,
+              tag_id,
+            };
+          });
+        // figure out which ones to remove
+        var productTagsToRemove = productTags
+          .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
+          .map(({ id }) => id);
+
+        // run both actions
+        return Promise.all([
+          ProductTag.destroy({ where: { id: productTagsToRemove }}),
+          ProductTag.bulkCreate(newProductTags),
+          res.json("Update Sucess")
+        ]);
+      }
+
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
-    
+    .then((updatedProductTags) => {
+      if (!updatedProductTags) {
+
+
+        res.json(updatedProductTags || "Updated Sucessfully")
+      }
+    })
+
+
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
     })
-    
- });
+
+});
 router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
-try{
-  const product = await Product.destroy({
-    where:{
-      id:req.params.id
-    }
-  })
-  res.status(200).json("Deleted Sucessfully ")
-}catch(err){
-  console.log(err)
-}
+  try {
+    const product = await Product.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.status(200).json("Deleted Sucessfully ")
+  } catch (err) {
+    console.log(err)
+  }
 
 });
 
