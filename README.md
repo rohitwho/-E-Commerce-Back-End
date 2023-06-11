@@ -7,11 +7,10 @@
 
 This project aims to develop a cutting-edge back end for an e-commerce website using the latest technologies. By leveraging Express.js, MySQL, and Sequelize, I created a functional API that connects seamlessly to a database. With intuitive commands for schema setup and data seeding, I ensure a hassle-free development process. The API provides GET routes for categories, products, and tags, displaying data in formatted JSON. Additionally, it supports POST, PUT, and DELETE routes for efficient data management. My solution equips your company to compete effectively in the e-commerce market by combining modern technologies with a robust and user-friendly API.
 
-## Deployed Application URL
+## Video Link
 
 ## Table of Content
 
-- [Features](#features)
 - [Dependencies](#dependencies)
 - [Language and Technology Used](#language-and-technology-used)
 - [Installation](#installation)
